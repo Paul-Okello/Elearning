@@ -7,7 +7,6 @@ import Image from "next/image";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-	metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL as string),
 	title: "Sign In",
 	description: "Sign in to your account",
 };
