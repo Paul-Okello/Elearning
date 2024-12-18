@@ -15,18 +15,18 @@ export const metadata: Metadata = {
 		"Edu Learn is a platform for creating and sharing educational content",
 };
 
-export default function RootLayout({
-  children,
+export default async function RootLayout({
+	children,
 }: Readonly<{
-  children: React.ReactNode;
+	children: React.ReactNode;
 }>) {
-  return (
-			<AuthProvider>
-				<html lang="en">
-					<body className={`${openSans.className}  antialiased`}>
-						<RootProvider>{children}</RootProvider>
-					</body>
-				</html>
-			</AuthProvider>
-		);
+	return (
+		<AuthProvider>
+			<html lang="en">
+				<body className={`${openSans.className}  antialiased`}>
+					<RootProvider>{children}</RootProvider>
+				</body>
+			</html>
+		</AuthProvider>
+	);
 }
