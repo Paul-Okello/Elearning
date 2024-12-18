@@ -13,6 +13,7 @@ import type {
   FilterApi,
   FunctionReference,
 } from "convex/server";
+import type * as attachments from "../attachments.js";
 import type * as chapter_chapter from "../chapter/chapter.js";
 import type * as chapter_chapterUtils from "../chapter/chapterUtils.js";
 import type * as course_course from "../course/course.js";
@@ -31,6 +32,7 @@ import type * as user_userUtils from "../user/userUtils.js";
  * ```
  */
 declare const fullApi: ApiFromModules<{
+  attachments: typeof attachments;
   "chapter/chapter": typeof chapter_chapter;
   "chapter/chapterUtils": typeof chapter_chapterUtils;
   "course/course": typeof course_course;

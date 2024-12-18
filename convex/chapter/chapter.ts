@@ -1,11 +1,9 @@
 import { internal } from "@/_generated/api";
 import { mutation, query } from "@/_generated/server";
-import { deleteChapterAttachments } from "@/attachments";
 import { getChapterById } from "@/chapter/chapterUtils";
 import { getMuxDataByChapterId } from "@/mux/mux";
 import { defineTable } from "convex/server";
 import { ConvexError, v } from "convex/values";
-import { getChapterAttachments } from "../attachments";
 
 export const chapterFields = defineTable({
 	courseId: v.id("course"),
@@ -35,9 +33,6 @@ export const getAllChaptersByCourse = query({
 					chapterId: chapter._id,
 				});
 
-				const chapterAttachments = await getChapterAttachments(ctx, {
-					chapterId: chapter._id,
-				});
 
 				return {
 					...chapter,
@@ -45,7 +40,6 @@ export const getAllChaptersByCourse = query({
 						muxDataId: muxData?._id,
 						muxAssetId: muxData?.assetId,
 						playbackId: muxData?.playbackId,
-						attachments: chapterAttachments,
 					},
 				};
 			}),
@@ -189,9 +183,6 @@ export const deleteChapter = mutation({
 			// Unpublish the course
 			await ctx.db.patch(courseId, { isPublished: false });
 		}
-
-		await deleteChapterAttachments(ctx, { chapterId });
-
 		// Delete the chapter
 		await ctx.db.delete(chapterId);
 	},
@@ -206,9 +197,6 @@ export const getChapter = query({
 		if (!chapter) throw new ConvexError("Chapter not found");
 
 		const muxData = await getMuxDataByChapterId(ctx, { chapterId });
-		const chapterAttachments = await getChapterAttachments(ctx, {
-			chapterId: chapter._id,
-		});
 
 		return {
 			...chapter,
@@ -216,7 +204,6 @@ export const getChapter = query({
 				muxDataId: muxData?._id,
 				muxAssetId: muxData?.assetId,
 				playbackId: muxData?.playbackId,
-				attachments: chapterAttachments,
 			},
 		};
 	},

@@ -5,12 +5,12 @@ import { ConvexError, v } from "convex/values";
 export const attachmentsFields = defineTable({
 	name: v.string(),
 	url: v.string(),
-	fileId: v.string(),
+	fileKey: v.string(),
+	fileType: v.optional(v.string()),
 	courseId: v.optional(v.id("course")),
 	chapterId: v.optional(v.id("chapter")),
 })
 	.index("by_courseId", ["courseId"])
-	.index("by_chapterId", ["chapterId"])
 	.index("by_name", ["name"])
 	.index("by_nameChapter", ["name", "chapterId"])
 	.index("by_courseName", ["courseId", "name"]);
@@ -19,14 +19,24 @@ export const createAttachment = mutation({
 	args: {
 		name: v.string(),
 		url: v.string(),
-		fileId: v.string(),
-		courseId: v.optional(v.id("course")),
-		chapterId: v.optional(v.id("chapter")),
+		fileKey: v.string(),
+		courseId: v.id("course"),
+		fileType: v.optional(v.string()),
 	},
 	handler: async (ctx, args) => {
-		return await ctx.db.insert("attachments", {
+		const course = await ctx.db.get(args.courseId);
+
+		if (!course) throw new ConvexError("Course Not Found");
+
+		const attachment = await ctx.db.insert("attachments", {
 			...args,
 		});
+
+		await ctx.db.patch(course._id, {
+			attachments: [...course.attachments, attachment],
+		});
+
+		return attachment;
 	},
 });
 
@@ -45,43 +55,6 @@ export const getCourseAttachments = query({
 	},
 });
 
-export const getChapterAttachments = query({
-	args: {
-		chapterId: v.id("chapter"),
-	},
-	handler: async (ctx, { chapterId }) => {
-		const attachments = await ctx.db
-			.query("attachments")
-			.withIndex("by_chapterId", (q) => q.eq("chapterId", chapterId))
-			.order("desc")
-			.collect();
-
-		return attachments;
-	},
-});
-
-export const deleteChapterAttachments = mutation({
-	args: {
-		chapterId: v.id("chapter"),
-	},
-	handler: async (ctx, { chapterId }) => {
-		const attachments = await ctx.db
-			.query("attachments")
-			.withIndex("by_chapterId", (q) => q.eq("chapterId", chapterId))
-			.collect();
-
-		if (attachments.length === 0) return;
-
-		/**
-		 * TODO: Delete the attachment from uploadthing using fileId
-		 */
-		await Promise.all(
-			attachments.map(
-				async (attachment) => await ctx.db.delete(attachment._id),
-			),
-		);
-	},
-});
 
 export const deleteCourseAttachments = mutation({
 	args: {
@@ -110,17 +83,22 @@ export const deleteCourseAttachments = mutation({
 export const deleteAttachment = mutation({
 	args: {
 		attachmentId: v.id("attachments"),
+		courseId: v.id("course"),
 	},
-	handler: async (ctx, { attachmentId }) => {
+	handler: async (ctx, { attachmentId, courseId }) => {
 		const attachment = await ctx.db.get(attachmentId);
+		const course = await ctx.db.get(courseId);
 
-		if (!attachment) {
-			throw new ConvexError("Attachment not found");
-		}
+		if (!course) throw new ConvexError("Course Not Found");
+
+		if (!attachment) throw new ConvexError("Attachment not found");
 
 		/**
 		 * TODO: Delete the attachment from uploadthing using fileId
 		 */
+		await ctx.db.patch(courseId, {
+			attachments: course.attachments.filter((at) => at !== attachmentId),
+		});
 		await ctx.db.delete(attachment._id);
 	},
 });

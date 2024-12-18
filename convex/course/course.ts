@@ -1,6 +1,8 @@
+import { Id } from "@/_generated/dataModel";
 import { mutation, query } from "@/_generated/server";
+import { createAttachment, getCourseAttachments } from "@/attachments";
 import { deleteChapter, getAllChaptersByCourse } from "@/chapter/chapter";
-import { getCourseById } from "@/course/courseUtils";
+import { courseCategories, getCourseById } from "@/course/courseUtils";
 import { getUserById } from "@/user/userUtils";
 import { defineTable, paginationOptsValidator } from "convex/server";
 import { ConvexError, v } from "convex/values";
@@ -9,15 +11,20 @@ export const courseFields = defineTable({
 	userId: v.id("user"),
 	title: v.optional(v.string()),
 	description: v.optional(v.string()),
-	imageUrl: v.optional(v.string()),
+	images: v.array(
+		v.object({
+			imageUrl: v.string(),
+			imageKey: v.string(),
+		}),
+	),
 	price: v.optional(v.float64()),
 	isPublished: v.boolean(),
-	categoryId: v.optional(v.id("category")),
-	attachments: v.optional(v.array(v.id("attachments"))),
+	category: v.optional(courseCategories),
+	attachments: v.array(v.id("attachments")),
 })
 	.index("by_userId", ["userId"])
 	.index("by_title", ["title"])
-	.index("by_categoryId", ["categoryId"]);
+	.index("by_category", ["category"]);
 
 export const createCourse = mutation({
 	args: {
@@ -33,6 +40,8 @@ export const createCourse = mutation({
 			userId: user._id,
 			title: args.title,
 			isPublished: false,
+			attachments: [],
+			images: [],
 		});
 	},
 });
@@ -72,11 +81,15 @@ export const getCourse = query({
 	handler: async (ctx, { courseId }) => {
 		const course = await getCourseById(ctx, courseId);
 		if (!course) throw new ConvexError("Course not found");
+		const courseAttachments = await getCourseAttachments(ctx, {
+			courseId,
+		});
 		const chapters = await getAllChaptersByCourse(ctx, { courseId });
 
 		return {
 			...course,
 			chapters,
+			attachments: courseAttachments,
 		};
 	},
 });
@@ -101,5 +114,96 @@ export const getAllCourses = query({
 				};
 			}),
 		);
+	},
+});
+
+export const updateCourse = mutation({
+	args: {
+		courseId: v.id("course"),
+		title: v.optional(v.string()),
+		description: v.optional(v.string()),
+		images: v.optional(
+			v.array(
+				v.object({
+					imageUrl: v.string(),
+					imageKey: v.string(),
+				}),
+			),
+		),
+		price: v.optional(v.float64()),
+		isPublished: v.optional(v.boolean()),
+		category: v.optional(courseCategories),
+		fileName: v.optional(v.string()),
+		fileType: v.optional(v.string()),
+		fileKey: v.optional(v.string()),
+		fileUrl: v.optional(v.string()),
+	},
+	handler: async (ctx, args) => {
+		const course = await getCourseById(ctx, args.courseId);
+
+		if (args.fileKey && args.fileName && args.fileType && args.fileUrl) {
+			const attachementId = await createAttachment(ctx, {
+				fileKey: args.fileKey,
+				name: args.fileName,
+				fileType: args.fileType,
+				url: args.fileUrl,
+				courseId: course._id,
+			});
+
+			return await ctx.db.patch(args.courseId, {
+				attachments: [...course.attachments.map((a) => a._id), attachementId],
+			});
+		}
+
+		return await ctx.db.patch(args.courseId, {
+			title: args.title ?? course.title,
+			description: args.description ?? course.description,
+			images: [...course.images, ...(args.images ?? [])],
+			price: args.price ?? course.price,
+			isPublished: args.isPublished ?? course.isPublished,
+			category: args.category ?? course.category,
+		});
+	},
+});
+
+export const publishCourse = mutation({
+	args: {
+		courseId: v.id("course"),
+	},
+	handler: async (ctx, { courseId }) => {
+		const course = await getCourse(ctx, {
+			courseId,
+		});
+
+		const publishedChapters = course.chapters.filter(
+			(chapter) => chapter.isPublished === true,
+		);
+
+		if (publishedChapters.length === 0) {
+			throw new ConvexError("Course must have at least one published chapter");
+		}
+
+		await ctx.db.patch(courseId, {
+			isPublished: true,
+		});
+
+		await ctx.db.patch(courseId, {
+			isPublished: true,
+		});
+	},
+});
+
+export const unpublishCourse = mutation({
+	args: {
+		courseId: v.id("course"),
+	},
+	handler: async (ctx, { courseId }) => {
+		const course = await getCourse(ctx, {
+			courseId,
+		});
+
+		await ctx.db.patch(course._id, {
+			isPublished: false,
+		});
 	},
 });
