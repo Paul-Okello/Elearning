@@ -1,8 +1,8 @@
 import TestimonialSlider from "@/components/landing/testimonial-slider";
 import Navbar from "@/components/layouts/site-header";
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { BookOpen, CheckCircle, Code, Users } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { CheckCircle, Code, Users } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -124,4 +124,3 @@ export default async function LandingPage() {
 		</div>
 	);
 }
-
