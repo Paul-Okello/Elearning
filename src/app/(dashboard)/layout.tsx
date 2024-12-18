@@ -1,4 +1,5 @@
 import Navbar from "@/components/layouts/site-header";
+import { ModeToggle } from "@/components/mode-toggle";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { ClerkLoaded, ClerkLoading, UserButton } from "@clerk/nextjs";
 import { Loader2 } from "lucide-react";
@@ -18,12 +19,17 @@ export default function DashboardLayout({children}: Props) {
 						<Navbar>
 							<div className="container flex h-14 items-center justify-between">
 								<SidebarTrigger />
-								<ClerkLoading>
-									<Loader2 className="size-5 animate-spin" />
-								</ClerkLoading>
-								<ClerkLoaded>
-									<UserButton />
-								</ClerkLoaded>
+								<div className="flex items-center gap-x-2 justify-center">
+									<div className="">
+										<ClerkLoading>
+											<Loader2 className="size-5 animate-spin" />
+										</ClerkLoading>
+										<ClerkLoaded>
+											<UserButton />
+										</ClerkLoaded>
+									</div>
+									<ModeToggle />
+								</div>
 							</div>
 						</Navbar>
 						<div className="">{children}</div>
