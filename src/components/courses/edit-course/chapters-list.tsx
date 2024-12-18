@@ -1,7 +1,6 @@
 "use client";
 
 import { api } from "@/_generated/api";
-import type { Doc, Id } from "@/_generated/dataModel";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { TypographySmall } from "@/components/ui/typography";
@@ -17,7 +16,7 @@ import { FunctionReturnType } from "convex/server";
 import { GripIcon, Pencil } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 type Props = {

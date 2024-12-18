@@ -1,7 +1,6 @@
 "use client";
 
 import { api } from "@/_generated/api";
-import type { Id } from "@/_generated/dataModel";
 import SubmitButton from "@/components/submit-button";
 import { Button } from "@/components/ui/button";
 import {
@@ -45,14 +44,11 @@ const CourseChaptersForm = (props: Props) => {
 		},
 	});
 	const createChapter = useMutation(api.chapter.chapter.createChapter);
-	const updateChapters = useMutation(
-		api.chapter.chapter.updateChapterPositions,
-	);
 
 	const [isCreating, setIsCreating] = useState(false);
 
 	const toggleCreating = () => setIsCreating((current) => !current);
-	const { isSubmitting, isValid } = form.formState;
+	const { isSubmitting } = form.formState;
 
 	const onSubmit = form.handleSubmit(async (data) => {
 		try {

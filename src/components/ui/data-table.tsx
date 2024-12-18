@@ -67,7 +67,7 @@ export function DataTable<TData, TValue>({
 	);
 	const [columnVisibility, setColumnVisibility] =
 		React.useState<VisibilityState>({});
-	const [rowsPerPage, setRowsPerPage] = React.useState(10);
+	const [rowsPerPage, _] = React.useState(15);
 	const [{ pageIndex, pageSize }, setPagination] = React.useState({
 		pageIndex: 0,
 		pageSize: rowsPerPage,

@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import {
 	SidebarMenuButton,
 	SidebarMenuItem,
@@ -9,14 +8,12 @@ import {
 import {
 	Tooltip,
 	TooltipContent,
-	TooltipProvider,
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { LucideIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React from "react";
 import { IconType } from "react-icons";
 
 
@@ -28,23 +25,9 @@ type Props = {
 	external?: boolean;
 };
 
-function SidebarCustomItem({
-	icon: Icon,
-	label,
-	href,
-	disabled = false,
-	external = false,
-}: Props) {
+function SidebarCustomItem({ icon: Icon, label, href }: Props) {
 	const pathname = usePathname();
-	const {
-		state,
-		open,
-		setOpen,
-		openMobile,
-		setOpenMobile,
-		isMobile,
-		toggleSidebar,
-	} = useSidebar();
+	const { state } = useSidebar();
 
 	const isActive = pathname === href || pathname?.startsWith(`${href}/`);
 

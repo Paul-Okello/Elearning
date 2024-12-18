@@ -15,7 +15,6 @@ import {
 	FormItem,
 	FormLabel,
 } from "@/components/ui/form";
-import { TypographySmall } from "@/components/ui/typography";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "convex/react";
 import { Eye } from "lucide-react";
@@ -47,7 +46,7 @@ const ChapterAccessForm = (props: Props) => {
 	const [isEditing, setIsEditing] = useState(false);
 
 	const toggleEdit = () => setIsEditing((current) => !current);
-	const { isSubmitting, isValid } = form.formState;
+	const { isSubmitting } = form.formState;
 
 	const onSubmit = form.handleSubmit(async (data) => {
 		try {

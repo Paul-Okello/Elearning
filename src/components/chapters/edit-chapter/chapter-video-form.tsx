@@ -22,23 +22,6 @@ const ChapterVideoForm = (props: Props) => {
 	const [isEditing, setIsEditing] = useState(false);
 	const toggleEdit = () => setIsEditing((current) => !current);
 
-	async function onSubmit(url: string) {
-		try {
-			await updateChapter({
-				chapterId: props.initialData._id,
-				videoUrl: url,
-			});
-			// Add success message or any other logic here
-			toggleEdit();
-			toast.success("Chapter Video updated successfully");
-			router.refresh();
-		} catch (error) {
-			// Handle error here
-			console.error("Error submitting form:", error);
-			toast.error("Error updating chapter video");
-			// Add error message or any other error handling logic here
-		}
-	}
 	return (
 		<Card>
 			<CardHeader>

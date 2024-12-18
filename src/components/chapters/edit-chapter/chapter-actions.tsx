@@ -42,6 +42,7 @@ const ChapterActions = ({
 			toast.warning("Chapter unpublished successfully");
 			router.refresh();
 		} catch (error) {
+			console.error(error);
 			setLoading(false);
 			toast.error("Failed to unpublish chapter");
 		} finally {
@@ -60,6 +61,7 @@ const ChapterActions = ({
 			toast.success("Chapter published successfully");
 			router.push(`/teacher/courses/${courseId}`);
 		} catch (error) {
+			console.error(error);
 			setLoading(false);
 			toast.error("Failed to publish chapter");
 		} finally {
@@ -79,6 +81,7 @@ const ChapterActions = ({
 			toast.success("Chapter deleted successfully");
 			router.push(`/teacher/courses/${courseId}`);
 		} catch (error) {
+			console.error(error);
 			setLoading(false);
 			toast.error("Failed to delete chapter");
 		} finally {

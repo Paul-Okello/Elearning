@@ -5,7 +5,7 @@ import Banner from "@/components/banner";
 import { IconBadge } from "@/components/icon-badge";
 import { CardDescription } from "@/components/ui/card";
 import { TypographyH2, TypographyH3 } from "@/components/ui/typography";
-import { type Preloaded, usePreloadedQuery, useQuery } from "convex/react";
+import { type Preloaded, usePreloadedQuery } from "convex/react";
 import {
 	CircleDollarSign,
 	File,

@@ -4,16 +4,11 @@ import { api } from "@/_generated/api";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { TypographyInlineCode } from "@/components/ui/typography";
 import { formatPrice } from "@/lib/format";
 import type { ColumnDef } from "@tanstack/react-table";
 import { FunctionReturnType } from "convex/server";
-import { ArrowUpDown, MoreHorizontal, Pencil } from "lucide-react";
+import { ArrowUpDown, Pencil } from "lucide-react";
 import Link from "next/link";
 
 type Column = FunctionReturnType<typeof api.course.course.getCoursesByUser>[0];

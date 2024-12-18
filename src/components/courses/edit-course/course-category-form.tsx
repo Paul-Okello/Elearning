@@ -1,7 +1,6 @@
 "use client";
 
 import { api } from "@/_generated/api";
-import type { Doc, Id } from "@/_generated/dataModel";
 import SubmitButton from "@/components/submit-button";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
@@ -49,7 +48,7 @@ const CourseCategoryForm = (props: Props) => {
 	const [isEditing, setIsEditing] = useState(false);
 
 	const toggleEdit = () => setIsEditing((current) => !current);
-	const { isSubmitting, isValid } = form.formState;
+	const { isSubmitting } = form.formState;
 
 	const onSubmit = form.handleSubmit(async (data) => {
 		try {

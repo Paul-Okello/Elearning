@@ -1,17 +1,9 @@
 "use client";
 
 import { buttonVariants } from "@/components/ui/button";
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from "@/components/ui/card";
-import { LogOut } from "lucide-react";
+import { Card, CardDescription, CardHeader } from "@/components/ui/card";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React from "react";
 import { VscArrowSwap } from "react-icons/vsc";
 
 export default function ModeSwitcher() {

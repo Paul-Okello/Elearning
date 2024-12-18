@@ -45,7 +45,7 @@ const CoursePriceForm = (props: Props) => {
 	const [isEditing, setIsEditing] = useState(false);
 
 	const toggleEdit = () => setIsEditing((current) => !current);
-	const { isSubmitting, isValid } = form.formState;
+	const { isSubmitting } = form.formState;
 
 	const onSubmit = form.handleSubmit(async (data) => {
 		try {

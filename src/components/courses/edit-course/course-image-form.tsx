@@ -1,7 +1,6 @@
 "use client";
 
 import { api } from "@/_generated/api";
-import type { Doc, Id } from "@/_generated/dataModel";
 import FileUpload from "@/components/file-upload";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";

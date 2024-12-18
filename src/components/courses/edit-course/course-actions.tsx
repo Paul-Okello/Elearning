@@ -37,6 +37,7 @@ const CourseActions = ({ disabled, courseId, isPublished, userId }: Props) => {
 			toast.warning("Course unpublished successfully");
 			router.refresh();
 		} catch (error) {
+			console.error(error);
 			setLoading(false);
 			toast.error("Failed to unpublish course");
 		} finally {
@@ -57,6 +58,7 @@ const CourseActions = ({ disabled, courseId, isPublished, userId }: Props) => {
 			router.push("/teacher/courses");
 			router.refresh();
 		} catch (error) {
+			console.error(error);
 			setLoading(false);
 			toast.error("Failed to publish chapter");
 		} finally {
@@ -77,6 +79,7 @@ const CourseActions = ({ disabled, courseId, isPublished, userId }: Props) => {
 			router.push("/teacher/courses");
 			router.refresh();
 		} catch (error) {
+			console.error(error);
 			setLoading(false);
 			toast.error("Failed to delete course");
 		} finally {

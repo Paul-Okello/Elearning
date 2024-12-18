@@ -29,7 +29,7 @@ import {
 } from "@/components/ui/tooltip";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "convex/react";
-import { Loader, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { useForm } from "react-hook-form";
@@ -58,7 +58,7 @@ export default function CourseCreateDialog({ userId }: Props) {
 
 	const createCourse = useMutation(api.course.course.createCourse);
 
-	const { isSubmitting, isValid } = form.formState;
+	const { isSubmitting } = form.formState;
 
 	async function onSubmit(values: z.infer<typeof formSchema>) {
 		try {
