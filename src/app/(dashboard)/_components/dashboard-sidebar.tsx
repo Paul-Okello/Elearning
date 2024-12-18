@@ -11,7 +11,9 @@ import {
 import { TypographyH4 } from "@/components/ui/typography";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import Link from "next/link";
 import DashboardRoutes from "./dashboard-routes";
+import ModeSwitcher from "./mode-switcher";
 
 function DashboardSidebar() {
 	const { state } = useSidebar();
@@ -19,7 +21,10 @@ function DashboardSidebar() {
 		<Sidebar variant="floating" collapsible="icon">
 			<SidebarHeader className="border-b">
 				<div className="flex items-center justify-between">
-					<Image src="/logo.webp" alt="logo" width={50} height={50} />
+					<Link href="/">
+						<Image src="/logo.webp" alt="logo" width={50} height={50} />
+					</Link>
+
 					<TypographyH4 className={cn(state === "collapsed" && "hidden")}>
 						Edu Learn
 					</TypographyH4>
@@ -29,7 +34,7 @@ function DashboardSidebar() {
 				<DashboardRoutes />
 			</SidebarContent>
 			<SidebarFooter>
-				<ModeToggle />
+				<ModeSwitcher />
 			</SidebarFooter>
 		</Sidebar>
 	);
