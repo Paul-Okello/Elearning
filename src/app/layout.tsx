@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Quicksand } from "next/font/google";
 import "./globals.css";
+import AuthProvider from "@/components/providers/auth-provider";
+import RootProvider from "@/components/providers/root-provider";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -10,6 +13,11 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const quickSand = Quicksand({
+	variable: "--font-quicksand",
+	subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
@@ -23,12 +31,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
-      </body>
-    </html>
-  );
+			<AuthProvider>
+				<html lang="en">
+					<body className={`${quickSand.className}  antialiased`}>
+						<RootProvider>{children}</RootProvider>
+					</body>
+				</html>
+			</AuthProvider>
+		);
 }

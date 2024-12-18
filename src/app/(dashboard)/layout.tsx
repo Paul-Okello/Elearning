@@ -1,18 +1,35 @@
-import DashboardSidebar from "./_components/dashboard-sidebar"
+import Navbar from "@/components/layouts/site-header";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
+import { ClerkLoaded, ClerkLoading, UserButton } from "@clerk/nextjs";
+import { Loader2 } from "lucide-react";
 import React from 'react'
+import DashboardSidebar from "./_components/dashboard-sidebar";
 
 type Props = {
   children: React.ReactNode
 }
+
 export default function DashboardLayout({children}: Props) {
   return (
-    <SidebarProvider>
-    <DashboardSidebar />
-    <main>
-      <SidebarTrigger />
-      {children}
-    </main>
-  </SidebarProvider>
-  )
+			<div className="flex">
+				<SidebarProvider>
+					<DashboardSidebar />
+					<main className="flex-1 ">
+						<Navbar>
+							<div className="container flex h-14 items-center justify-between">
+								<SidebarTrigger />
+								<ClerkLoading>
+									<Loader2 className="size-5 animate-spin" />
+								</ClerkLoading>
+								<ClerkLoaded>
+									<UserButton />
+								</ClerkLoaded>
+							</div>
+						</Navbar>
+						<div className="">{children}</div>
+					</main>
+				</SidebarProvider>
+			</div>
+		);
 }
+
