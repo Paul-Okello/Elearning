@@ -1,38 +1,27 @@
 import TestimonialSlider from "@/components/landing/testimonial-slider";
+import Navbar from "@/components/layouts/site-header";
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { BookOpen, CheckCircle, Code, Users } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 export default async function LandingPage() {
 	return (
 		<div className="flex flex-col min-h-screen w-full">
-			<header className="px-4 lg:px-6 h-14 flex items-center">
-				<Link className="flex items-center justify-center" href="#">
-					<BookOpen className="h-6 w-6 mr-2" />
-					<span className="font-bold">EduLearn</span>
-				</Link>
-				<nav className="ml-auto flex gap-4 sm:gap-6">
-					<Link
-						className="text-sm font-medium hover:underline underline-offset-4"
-						href="#"
-					>
-						Courses
+			<Navbar>
+				<div className="container mx-auto flex h-14 items-center justify-between">
+					<Link href="/" className="flex items-center gap-x-2">
+						<Image src="/logo.webp" alt="logo" width={50} height={50} />
+						<span className="font-bold">EduLearn</span>
 					</Link>
-					<Link
-						className="text-sm font-medium hover:underline underline-offset-4"
-						href="#"
-					>
-						About
-					</Link>
-					<Link
-						className="text-sm font-medium hover:underline underline-offset-4"
-						href="#"
-					>
-						Contact
-					</Link>
-				</nav>
-			</header>
+
+					<div className="">
+						<Link href="/index">Courses</Link>
+					</div>
+				</div>
+			</Navbar>
+
 			<main className="flex-1">
 				<section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 max-w-7xl mx-auto">
 					<div className="container px-4 md:px-6">
@@ -50,7 +39,7 @@ export default async function LandingPage() {
 								<Button asChild>
 									<Link href="/new-user">Get Started</Link>
 								</Button>
-								<Button variant="outline">Learn More</Button>
+								{/* <Button variant="outline">Learn More</Button> */}
 							</div>
 						</div>
 					</div>
@@ -100,7 +89,7 @@ export default async function LandingPage() {
 						<TestimonialSlider />
 					</div>
 				</section>
-				<section className="w-full py-12 md:py-24 lg:py-32 bg-primary text-primary-foreground">
+				<section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-br from-primary/30 via-primary/55 to-primary/90 text-primary-foreground">
 					<div className="container px-4 md:px-6">
 						<div className="flex flex-col items-center space-y-4 text-center">
 							<div className="space-y-2">
@@ -112,8 +101,8 @@ export default async function LandingPage() {
 									courses.
 								</p>
 							</div>
-							<Button variant="secondary" size="lg">
-								Enroll Now
+							<Button asChild variant="secondary" size="lg">
+								<Link href="/index">Enroll Now</Link>
 							</Button>
 						</div>
 					</div>

@@ -83,7 +83,7 @@ export default function CourseCreateDialog({ userId }: Props) {
 				<Tooltip>
 					<TooltipTrigger asChild>
 						<DialogTrigger asChild>
-							<Button variant="secondary" size="icon">
+							<Button variant="outline" className="rounded-full" size="icon">
 								<Plus className="size-5" />
 							</Button>
 						</DialogTrigger>
