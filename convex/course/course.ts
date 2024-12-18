@@ -1,4 +1,3 @@
-import { Id } from "@/_generated/dataModel";
 import { mutation, query } from "@/_generated/server";
 import { createAttachment, getCourseAttachments } from "@/attachments";
 import { deleteChapter, getAllChaptersByCourse } from "@/chapter/chapter";
@@ -95,25 +94,20 @@ export const getCourse = query({
 });
 
 export const getAllCourses = query({
-	args: { paginationOpts: paginationOptsValidator },
-	handler: async (ctx, args) => {
-		const courses = await ctx.db
-			.query("course")
-			.order("desc")
-			.paginate(args.paginationOpts);
+	handler: async (ctx) => {
+		const courses = await ctx.db.query("course").order("desc").collect();
 
-		return await Promise.all(
-			courses.page.map(async (course) => {
-				const chapters = await getAllChaptersByCourse(ctx, {
+		const data = await Promise.all(
+			courses.map(async (course) => {
+				const completeCourse = await getCourse(ctx, {
 					courseId: course._id,
 				});
 
-				return {
-					...course,
-					chapters,
-				};
+				return completeCourse;
 			}),
 		);
+
+		return data.filter((course) => course.isPublished === true);
 	},
 });
 
@@ -205,5 +199,30 @@ export const unpublishCourse = mutation({
 		await ctx.db.patch(course._id, {
 			isPublished: false,
 		});
+	},
+});
+
+export const getCoursesByUser = query({
+	args: {
+		clerkId: v.string(),
+	},
+	handler: async (ctx, { clerkId }) => {
+		const user = await getUserById(ctx, clerkId);
+		if (!user) throw new ConvexError("User Not Found");
+
+		const courses = await ctx.db
+			.query("course")
+			.withIndex("by_userId", (q) => q.eq("userId", user._id))
+			.collect();
+
+		return await Promise.all(
+			courses.map(async (course) => {
+				const data = await getCourse(ctx, {
+					courseId: course._id,
+				});
+
+				return data;
+			}),
+		);
 	},
 });

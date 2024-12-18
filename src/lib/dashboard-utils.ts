@@ -3,14 +3,14 @@ import { BarChart, Compass, Layout, List } from "lucide-react";
 const guestRoutes = [
 	{
 		icon: Layout,
-		label: "Dashboard",
+		label: "Courses",
 		href: "/index",
 	},
-	{
-		icon: Compass,
-		label: "Browse",
-		href: "/index/search",
-	},
+	// {
+	// 	icon: Compass,
+	// 	label: "Browse",
+	// 	href: "/index/search",
+	// },
 ];
 
 const teacherRoutes = [
