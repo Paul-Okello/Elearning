@@ -58,7 +58,7 @@ export const createMuxDataAssetAction = internalAction({
 				},
 			],
 			playback_policy: ["public"],
-			test: false,
+			test: true,
 		};
 
 		// Create the Mux video asset

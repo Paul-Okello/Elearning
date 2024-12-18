@@ -33,7 +33,6 @@ export const getAllChaptersByCourse = query({
 					chapterId: chapter._id,
 				});
 
-
 				return {
 					...chapter,
 					...{
@@ -206,5 +205,64 @@ export const getChapter = query({
 				playbackId: muxData?.playbackId,
 			},
 		};
+	},
+});
+
+// publish chapter mutation
+export const publishChapter = mutation({
+	args: {
+		chapterId: v.id("chapter"),
+	},
+	handler: async (ctx, args) => {
+		const chapter = await getChapterById(ctx, args.chapterId);
+		if (!chapter) throw new ConvexError("Chapter not found");
+
+		const muxData = await getMuxDataByChapterId(ctx, {
+			chapterId: args.chapterId,
+		});
+
+		if (
+			!chapter.title ||
+			!muxData ||
+			!chapter.description ||
+			!chapter.videoUrl
+		) {
+			throw new ConvexError("Missing required fields");
+		}
+
+		// publish chapter
+		return await ctx.db.patch(chapter._id, { isPublished: true });
+	},
+});
+
+// unpublish chapter mutation
+export const unpublishChapter = mutation({
+	args: {
+		chapterId: v.id("chapter"),
+		courseId: v.id("course"),
+	},
+	handler: async (ctx, args) => {
+		const chapter = await getChapterById(ctx, args.chapterId);
+		if (!chapter) throw new ConvexError("Chapter Not Found");
+
+		// unpublish chapter
+		await ctx.db.patch(args.chapterId, { isPublished: false });
+
+		// check if this chapter is the only one that is published in its course
+		const publishedChaptersInCourse = await ctx.db
+			.query("chapter")
+			.withIndex("by_courseId", (q) => q.eq("courseId", args.courseId))
+			.collect();
+
+		const publishedChapters = publishedChaptersInCourse.filter(
+			(chapter) => chapter.isPublished,
+		);
+
+		if (publishedChapters.length === 0) {
+			// unpublish the course too
+			await ctx.db.patch(args.courseId, { isPublished: false });
+		}
+
+		return true;
 	},
 });
