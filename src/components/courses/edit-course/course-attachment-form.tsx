@@ -1,7 +1,7 @@
 "use client";
 
 import { api } from "@/_generated/api";
-import type { Doc, Id } from "@/_generated/dataModel";
+import type { Id } from "@/_generated/dataModel";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import {

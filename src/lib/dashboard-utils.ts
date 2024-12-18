@@ -1,4 +1,4 @@
-import { BarChart, Compass, Layout, List } from "lucide-react";
+import { BarChart, Layout, List } from "lucide-react";
 
 const guestRoutes = [
 	{
